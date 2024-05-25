@@ -1,0 +1,14 @@
+.imageWrap {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+.imageWrap:hover {
+  transform: scale(1.02);
+}
+.image {
+  width: 600px;
+  height: 400px;
+  object-fit: cover;
+  cursor: pointer;
+}
