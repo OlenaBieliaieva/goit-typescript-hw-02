@@ -1,32 +1,42 @@
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { getPhotos } from "./services/api";
+import { Image } from "./types";
 
 import SearchBar from "./components/SearchBar/SearchBar";
 import Loader from "./components/Loader/Loader";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+// import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageModal from "./components/ImageModal/ImageModal";
 
 const App = () => {
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [isVisible, setVisible] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [url, setUrl] = useState("");
-  const [alt, setAlt] = useState("");
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [images, setImages] = useState<Image[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<unknown>(null);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const [isVisible, setVisible] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [url, setUrl] = useState<string>("");
+  const [alt, setAlt] = useState<string>("");
+
+  interface Interface {
+    total_pages: number;
+    results: Image[];
+  }
 
   useEffect(() => {
     if (!query) return;
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
       setLoading(true);
+      setError(false);
       try {
-        const { results, total_pages } = await getPhotos(query, page);
+        const { results, total_pages }: Interface = await getPhotos(
+          query,
+          page
+        );
         if (!results.length) {
           setIsEmpty(true);
           return;
@@ -42,22 +52,23 @@ const App = () => {
     fetchData();
   }, [page, query]);
 
-  const onHandleSubmit = (value) => {
+  const onHandleSubmit = (value: string): void => {
     setQuery(value);
     setIsEmpty(false);
     setImages([]);
     setPage(1);
+    setError(false);
   };
 
-  const onClick = () => setPage((prevPage) => prevPage + 1);
+  const onClick = (): void => setPage((prevPage) => prevPage + 1);
 
-  const openModal = (url, alt) => {
+  const openModal = (oobj: Image): void => {
     setShowModal(true);
     setUrl(url);
     setAlt(alt);
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setShowModal(false);
     setUrl("");
     setAlt("");
@@ -79,7 +90,7 @@ const App = () => {
       />
       {isVisible && <LoadMoreBtn onClick={onClick} />}
       {loading && <Loader />}
-      {error && <ErrorMessage />}
+      {/* {error && <ErrorMessage />} */}
     </div>
   );
 };
