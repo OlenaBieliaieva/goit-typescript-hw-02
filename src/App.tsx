@@ -7,7 +7,6 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import Loader from "./components/Loader/Loader";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
-// import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageModal from "./components/ImageModal/ImageModal";
 
 const App = () => {
@@ -62,10 +61,10 @@ const App = () => {
 
   const onClick = (): void => setPage((prevPage) => prevPage + 1);
 
-  const openModal = (oobj: Image): void => {
+  const openModal = (obj: Image): void => {
     setShowModal(true);
-    setUrl(url);
-    setAlt(alt);
+    setUrl(obj.urls.regular);
+    setAlt(obj.alt_description);
   };
 
   const closeModal = (): void => {
@@ -90,7 +89,6 @@ const App = () => {
       />
       {isVisible && <LoadMoreBtn onClick={onClick} />}
       {loading && <Loader />}
-      {/* {error && <ErrorMessage />} */}
     </div>
   );
 };
